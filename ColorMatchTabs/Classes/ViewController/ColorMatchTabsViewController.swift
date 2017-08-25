@@ -65,7 +65,7 @@ open class ColorMatchTabsViewController: UITabBarController {
     }
     
     open override func loadView() {
-        view = MenuView()
+        view = MenuView(frame: CGRect.zero, isNavigationBarOnTop: false) // ac
     }
     
     open override func viewDidLoad() {

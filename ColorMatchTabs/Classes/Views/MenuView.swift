@@ -39,6 +39,15 @@ class MenuView: UIView {
         shadowView.isHidden = hidden
     }
     
+    // ac
+    var isNavigationBarOnTop: Bool = true // should be called before creating
+    
+    init(frame: CGRect, isNavigationBarOnTop: Bool) {
+        super.init(frame: frame)
+        
+        self.isNavigationBarOnTop = isNavigationBarOnTop
+        commonInit()
+    }
 }
 
 // Init
@@ -70,8 +79,13 @@ private extension MenuView {
         
         shadowView = VerticalGradientView()
         shadowView.isHidden = true
-        shadowView.topColor = UIColor(white: 1, alpha: 0)
-        shadowView.bottomColor = UIColor(white: 1, alpha: 1)
+        if isNavigationBarOnTop {
+            shadowView.topColor = UIColor(white: 1, alpha: 0)
+            shadowView.bottomColor = UIColor(white: 1, alpha: 1)
+        } else {
+            shadowView.topColor = UIColor(white: 1, alpha: 1)
+            shadowView.bottomColor = UIColor(white: 1, alpha: 0)
+        }
         addSubview(shadowView)
         
         circleMenuButton = UIButton()
@@ -89,9 +103,15 @@ private extension MenuView {
     func layoutNavigationBar() {
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        navigationBar.topAnchor.constraint(equalTo: topAnchor).isActive = true
         navigationBar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         navigationBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        // ac
+        if isNavigationBarOnTop {
+            navigationBar.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        } else {
+            navigationBar.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
     }
     
     func layoutTabs() {
@@ -105,23 +125,40 @@ private extension MenuView {
     func layoutScrollMenu() {
         scrollMenu.translatesAutoresizingMaskIntoConstraints = false
         scrollMenu.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        scrollMenu.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         scrollMenu.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        // ac
+        if isNavigationBarOnTop {
+            scrollMenu.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
+            scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        } else {
+            scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            scrollMenu.bottomAnchor.constraint(equalTo: navigationBar.topAnchor).isActive = true
+        }
     }
     
     func layoutShadowView() {
         shadowView.translatesAutoresizingMaskIntoConstraints = false
         shadowView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         shadowView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        shadowView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         shadowView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        if isNavigationBarOnTop {
+            shadowView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        } else {
+            shadowView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        }
     }
     
     func layoutCircleMenu() {
         circleMenuButton.translatesAutoresizingMaskIntoConstraints = false
-        circleMenuButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: PlusButtonButtonOffset).isActive = true
         circleMenuButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
+        if isNavigationBarOnTop {
+            circleMenuButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: PlusButtonButtonOffset).isActive = true
+        } else {
+            circleMenuButton.topAnchor.constraint(equalTo: topAnchor, constant: -PlusButtonButtonOffset).isActive = true
+        }
     }
     
 }
