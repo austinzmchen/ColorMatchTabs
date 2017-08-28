@@ -133,11 +133,11 @@ private extension MenuView {
         
         // ac
         if isNavigationBarOnTop {
-            scrollMenu.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
+            scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
             scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         } else {
             scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            scrollMenu.bottomAnchor.constraint(equalTo: navigationBar.topAnchor).isActive = true
+            scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         }
     }
     
