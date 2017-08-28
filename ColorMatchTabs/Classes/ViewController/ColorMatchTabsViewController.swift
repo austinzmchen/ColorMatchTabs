@@ -18,7 +18,19 @@ public protocol ColorMatchTabsViewControllerDataSource: class {
     func tabsViewController(_ controller: ColorMatchTabsViewController, iconAt index: Int) -> UIImage
     func tabsViewController(_ controller: ColorMatchTabsViewController, hightlightedIconAt index: Int) -> UIImage
     func tabsViewController(_ controller: ColorMatchTabsViewController, tintColorAt index: Int) -> UIColor
+}
 
+public struct ACCustomColorMatchTabsViewControllerStyle {
+    public var navigationBarColor: UIColor?
+    public var isNavigationBarBlurred: Bool
+    public var isNavigationBarOnTop: Bool
+    public var tabFont: UIFont?
+    public var scrollViewBackgroundColor: UIColor?
+    
+    public init() {
+        isNavigationBarBlurred = false
+        isNavigationBarOnTop = true
+    }
 }
 
 open class ColorMatchTabsViewController: UITabBarController {
@@ -57,6 +69,8 @@ open class ColorMatchTabsViewController: UITabBarController {
         return _view.tabs.selectedSegmentIndex
     }
     
+    public var style: ACCustomColorMatchTabsViewControllerStyle? // ac
+    
     fileprivate var icons: [UIImageView] = []
     fileprivate let circleTransition = CircleTransition()
     
@@ -79,6 +93,26 @@ open class ColorMatchTabsViewController: UITabBarController {
         setupCircleMenu()
         updateNavigationBar(forSelectedIndex: 0)
         updateScrollEnabled()
+        
+        if let s = style {
+            _view.isNavigationBarOnTop = s.isNavigationBarOnTop
+//            _view.layoutConstraints()
+//            _view.updateConstraintsIfNeeded()
+            
+            _view.navigationBar.isBlurred = s.isNavigationBarBlurred
+            
+            if let tf = s.tabFont {
+                _view.tabs.titleFont = tf
+            }
+            
+            if let nbColor = s.navigationBarColor {
+                _view.navigationBar.backgroundColor = nbColor
+            }
+            
+            if let sbgColor = s.scrollViewBackgroundColor {
+                _view.scrollMenu.solidBackgroundColor = sbgColor
+            }
+        }
     }
     
     open func selectItem(at index: Int) {
@@ -155,6 +189,12 @@ private extension ColorMatchTabsViewController {
     }
     
     func updateNavigationBar(forSelectedIndex index: Int) {
+        // ac
+        if let sbc = _view.scrollMenu.solidBackgroundColor {
+            _view.scrollMenu.backgroundColor = sbc
+            return
+        }
+        
         let color = dataSource?.tabsViewController(self, tintColorAt: index) ?? .white
         
         titleLabel.textColor = color

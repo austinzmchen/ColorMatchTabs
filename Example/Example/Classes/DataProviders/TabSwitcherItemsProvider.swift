@@ -15,13 +15,13 @@ class TabItemsProvider {
         return [
             TabItem(
                 title: "Products",
-                tintColor: UIColor(red: 0.51, green: 0.72, blue: 0.25, alpha: 1.00),
+                tintColor: UIColor(red: 21/255.0, green: 149/255.0, blue: 211/255.0, alpha: 1),
                 normalImage: UIImage(named: "products_normal")!,
                 highlightedImage: UIImage(named: "products_highlighted")!
             ),
             TabItem(
                 title: "Places",
-                tintColor: UIColor(red: 0.15, green: 0.67, blue: 0.99, alpha: 1.00),
+                tintColor: UIColor(red: 246/255.0, green: 148/255.0, blue: 0/255.0, alpha: 1),
                 normalImage: UIImage(named: "venues_normal")!,
                 highlightedImage: UIImage(named: "venues_highlighted")!
             ),

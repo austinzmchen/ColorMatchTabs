@@ -10,7 +10,7 @@ import UIKit
 
 class MenuView: UIView {
     
-    internal(set) var navigationBar: UIView!
+    internal(set) var navigationBar: ExtendedNavigationBar!
     internal(set) var tabs: ColorTabs!
     internal(set) var scrollMenu: ScrollMenu!
     internal(set) var circleMenuButton: UIButton!
@@ -48,6 +48,14 @@ class MenuView: UIView {
         self.isNavigationBarOnTop = isNavigationBarOnTop
         commonInit()
     }
+    
+    open func layoutConstraints() {
+        layoutNavigationBar()
+        layoutTabs()
+        layoutScrollMenu()
+        layoutShadowView()
+        layoutCircleMenu()
+    }
 }
 
 // Init
@@ -57,11 +65,7 @@ private extension MenuView {
         backgroundColor = .white
         createSubviews()
         
-        layoutNavigationBar()
-        layoutTabs()
-        layoutScrollMenu()
-        layoutShadowView()
-        layoutCircleMenu()
+        layoutConstraints()
     }
     
     func createSubviews() {
@@ -70,7 +74,6 @@ private extension MenuView {
         addSubview(scrollMenu)
         
         navigationBar = ExtendedNavigationBar()
-        navigationBar.backgroundColor = .white
         addSubview(navigationBar)
         
         tabs = ColorTabs()
@@ -104,7 +107,7 @@ private extension MenuView {
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         navigationBar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        navigationBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        navigationBar.heightAnchor.constraint(equalToConstant: 54).isActive = true
         
         // ac
         if isNavigationBarOnTop {
@@ -117,9 +120,10 @@ private extension MenuView {
     func layoutTabs() {
         tabs.translatesAutoresizingMaskIntoConstraints = false
         tabs.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor).isActive = true
-        tabs.topAnchor.constraint(equalTo: navigationBar.topAnchor).isActive = true
+        // tabs.topAnchor.constraint(equalTo: navigationBar.topAnchor).isActive = true
+        tabs.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor).isActive = true // center Y instead align top
         tabs.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor).isActive = true
-        tabs.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        tabs.heightAnchor.constraint(equalToConstant: 36).isActive = true
     }
     
     func layoutScrollMenu() {

@@ -25,7 +25,8 @@ open class ScrollMenu: UIScrollView {
     
     @IBOutlet open weak var menuDelegate: ScrollMenuDelegate?
     @IBOutlet open weak var dataSource: ScrollMenuDataSource?
-    
+
+    open var solidBackgroundColor: UIColor? // ac
     open var destinationIndex = 0
 
     fileprivate var indexOfVisibleItem: Int {

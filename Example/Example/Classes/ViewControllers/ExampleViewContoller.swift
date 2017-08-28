@@ -12,6 +12,13 @@ import ColorMatchTabs
 class ExampleViewContoller: ColorMatchTabsViewController {
     
     override func viewDidLoad() {
+        var style = ACCustomColorMatchTabsViewControllerStyle()
+        style.isNavigationBarBlurred = true
+        style.isNavigationBarOnTop = false
+        style.scrollViewBackgroundColor = UIColor.black
+        style.tabFont = UIFont(name: "Gotham-Bold", size: 13)
+        self.style = style
+        
         super.viewDidLoad()
         
         titleLabel.font = UIFont.navigationTitleFont()
