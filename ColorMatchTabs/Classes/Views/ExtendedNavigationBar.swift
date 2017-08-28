@@ -14,11 +14,11 @@ final class ExtendedNavigationBar: UIView {
         layer.shadowOffset = CGSize(width: 0, height: 1 / UIScreen.main.scale)
         layer.shadowRadius = 0
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.25
+        // layer.shadowOpacity = 0.25 // conflict with blurView's blur
     }
     
     // ac
-    open let blurView = UIVisualEffectView()
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
     open var isBlurred: Bool = false {
         didSet {
@@ -29,9 +29,7 @@ final class ExtendedNavigationBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        blurView.effect = UIBlurEffect(style: .dark)
         self.isBlurred = false
-        
         self.addSubview(blurView)
         self.backgroundColor = UIColor.clear
     }
