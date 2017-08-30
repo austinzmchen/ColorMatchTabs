@@ -10,6 +10,9 @@ import UIKit
 
 class MenuView: UIView {
     
+    var circleButtonTopCt: NSLayoutConstraint?
+    var circleButtonBottomCt: NSLayoutConstraint?
+    
     internal(set) var navigationBar: ExtendedNavigationBar!
     internal(set) var tabs: ColorTabs!
     internal(set) var scrollMenu: ScrollMenu!
@@ -55,6 +58,8 @@ class MenuView: UIView {
         layoutScrollMenu()
         layoutShadowView()
         layoutCircleMenu()
+        
+        setNeedsUpdateConstraints()
     }
 }
 
@@ -82,13 +87,6 @@ private extension MenuView {
         
         shadowView = VerticalGradientView()
         shadowView.isHidden = true
-        if isNavigationBarOnTop {
-            shadowView.topColor = UIColor(white: 1, alpha: 0)
-            shadowView.bottomColor = UIColor(white: 1, alpha: 1)
-        } else {
-            shadowView.topColor = UIColor(white: 1, alpha: 1)
-            shadowView.bottomColor = UIColor(white: 1, alpha: 0)
-        }
         addSubview(shadowView)
         
         circleMenuButton = UIButton()
@@ -96,6 +94,9 @@ private extension MenuView {
         circleMenuButton.setImage(UIImage(namedInCurrentBundle: "circle_menu"), for: UIControlState())
         circleMenuButton.adjustsImageWhenHighlighted = false
         addSubview(circleMenuButton)
+        
+        circleButtonBottomCt = circleMenuButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: PlusButtonButtonOffset)
+        circleButtonTopCt = circleMenuButton.topAnchor.constraint(equalTo: topAnchor, constant: -PlusButtonButtonOffset)
     }
     
 }
@@ -111,9 +112,11 @@ private extension MenuView {
         
         // ac
         if isNavigationBarOnTop {
-            navigationBar.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            navigationBar.topCt?.isActive = true
+            navigationBar.bottomCt?.isActive = false
         } else {
-            navigationBar.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            navigationBar.topCt?.isActive = false
+            navigationBar.bottomCt?.isActive = true
         }
     }
     
@@ -130,15 +133,8 @@ private extension MenuView {
         scrollMenu.translatesAutoresizingMaskIntoConstraints = false
         scrollMenu.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         scrollMenu.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        
-        // ac
-        if isNavigationBarOnTop {
-            scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        } else {
-            scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        }
+        scrollMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        scrollMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
     func layoutShadowView() {
@@ -148,9 +144,19 @@ private extension MenuView {
         shadowView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         if isNavigationBarOnTop {
-            shadowView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            shadowView.topCt?.isActive = false
+            shadowView.bottomCt?.isActive = true
         } else {
-            shadowView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            shadowView.topCt?.isActive = true
+            shadowView.bottomCt?.isActive = false
+        }
+        
+        if isNavigationBarOnTop {
+            shadowView.topColor = UIColor(white: 1, alpha: 0)
+            shadowView.bottomColor = UIColor(white: 1, alpha: 1)
+        } else {
+            shadowView.topColor = UIColor(white: 1, alpha: 1)
+            shadowView.bottomColor = UIColor(white: 1, alpha: 0)
         }
     }
     
@@ -159,9 +165,11 @@ private extension MenuView {
         circleMenuButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         if isNavigationBarOnTop {
-            circleMenuButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: PlusButtonButtonOffset).isActive = true
+            circleButtonBottomCt?.isActive = true
+            circleButtonTopCt?.isActive = false
         } else {
-            circleMenuButton.topAnchor.constraint(equalTo: topAnchor, constant: -PlusButtonButtonOffset).isActive = true
+            circleButtonBottomCt?.isActive = false
+            circleButtonTopCt?.isActive = true
         }
     }
     

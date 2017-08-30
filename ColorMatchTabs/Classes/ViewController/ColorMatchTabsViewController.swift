@@ -79,7 +79,7 @@ open class ColorMatchTabsViewController: UITabBarController {
     }
     
     open override func loadView() {
-        view = MenuView(frame: CGRect.zero, isNavigationBarOnTop: false) // ac
+        view = MenuView()
         view.layoutIfNeeded() // do it here because MenuView's willMoveToSuperView is not called if self.parentViewController is not a UINavigationController. Weird!
     }
     
@@ -96,8 +96,7 @@ open class ColorMatchTabsViewController: UITabBarController {
         
         if let s = style {
             _view.isNavigationBarOnTop = s.isNavigationBarOnTop
-//            _view.layoutConstraints()
-//            _view.updateConstraintsIfNeeded()
+            _view.layoutConstraints()
             
             _view.navigationBar.isBlurred = s.isNavigationBarBlurred
             

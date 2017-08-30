@@ -10,6 +10,9 @@ import UIKit
 
 final class ExtendedNavigationBar: UIView {
     
+    var topCt: NSLayoutConstraint?
+    var bottomCt: NSLayoutConstraint?
+    
     override func willMove(toWindow newWindow: UIWindow?) {
         layer.shadowOffset = CGSize(width: 0, height: 1 / UIScreen.main.scale)
         layer.shadowRadius = 0
@@ -34,26 +37,23 @@ final class ExtendedNavigationBar: UIView {
         self.backgroundColor = UIColor.clear
     }
     
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-        /* not working ?
-        blurView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        blurView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        blurView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        blurView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        self.setNeedsUpdateConstraints()
-        */
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        blurView.frame = self.bounds
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        blurView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        blurView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        blurView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        
+        guard let sv = self.superview
+            else { return }
+        
+        topCt = topAnchor.constraint(equalTo: sv.topAnchor)
+        bottomCt = bottomAnchor.constraint(equalTo: sv.bottomAnchor)
+    }
 }

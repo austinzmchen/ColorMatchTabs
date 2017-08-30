@@ -10,6 +10,9 @@ import UIKit
 
 @IBDesignable class VerticalGradientView: UIView {
     
+    var topCt: NSLayoutConstraint?
+    var bottomCt: NSLayoutConstraint?
+    
     @IBInspectable var topColor: UIColor = .white {
         didSet {
             updateColors()
@@ -52,6 +55,17 @@ import UIKit
         didSet {
             updateSize()
         }
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        guard let cv = superview else {
+            return
+        }
+        
+        topCt = topAnchor.constraint(equalTo: cv.topAnchor)
+        bottomCt = bottomAnchor.constraint(equalTo: cv.bottomAnchor)
     }
     
 }
