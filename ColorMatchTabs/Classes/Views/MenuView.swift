@@ -52,14 +52,14 @@ class MenuView: UIView {
         commonInit()
     }
     
-    open func layoutConstraints() {
+    override func updateConstraints() {
+        super.updateConstraints()
+        
         layoutNavigationBar()
         layoutTabs()
         layoutScrollMenu()
         layoutShadowView()
         layoutCircleMenu()
-        
-        setNeedsUpdateConstraints()
     }
 }
 
@@ -70,7 +70,7 @@ private extension MenuView {
         backgroundColor = .white
         createSubviews()
         
-        layoutConstraints()
+        setNeedsUpdateConstraints()
     }
     
     func createSubviews() {

@@ -96,7 +96,7 @@ open class ColorMatchTabsViewController: UITabBarController {
         
         if let s = style {
             _view.isNavigationBarOnTop = s.isNavigationBarOnTop
-            _view.layoutConstraints()
+            _view.setNeedsUpdateConstraints()
             
             _view.navigationBar.isBlurred = s.isNavigationBarBlurred
             
