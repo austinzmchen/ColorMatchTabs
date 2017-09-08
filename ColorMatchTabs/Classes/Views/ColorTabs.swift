@@ -94,6 +94,7 @@ open class ColorTabs: UIControl {
     open override func layoutSubviews() {
         super.layoutSubviews()
         
+        stackView.layoutIfNeeded()
         moveHighlighterView(toItemAt: selectedSegmentIndex)
     }
     
