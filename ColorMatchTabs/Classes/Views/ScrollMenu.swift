@@ -28,6 +28,7 @@ open class ScrollMenu: UIScrollView {
 
     open var solidBackgroundColor: UIColor? // ac
     open var destinationIndex = 0
+    open var isCustomSetContentOffsetAnimation = true // ac
 
     fileprivate var indexOfVisibleItem: Int {
         if bounds.width > 0 {
@@ -144,7 +145,26 @@ private extension ScrollMenu {
         if viewControllers.count > index {
             let width = viewControllers[index].view.bounds.width
             let contentOffsetX = width * CGFloat(index)
-            setContentOffset(CGPoint(x: contentOffsetX, y: contentOffset.y), animated: animated)
+            
+            if isCustomSetContentOffsetAnimation && animated {
+                UIView.animate(withDuration: 0.5, delay: 0,
+                               usingSpringWithDamping: 0.8,
+                               initialSpringVelocity: 0,
+                               options: .curveLinear,
+                               animations:
+                    {
+                        self.setContentOffset(CGPoint(x: contentOffsetX, y: self.contentOffset.y), animated:false)
+                }, completion: { (finished) in
+                    if !finished {
+                        self.setContentOffset(CGPoint(x: contentOffsetX, y: self.contentOffset.y), animated:
+                            false)
+                    }
+                })
+            } else {
+                setContentOffset(CGPoint(x: contentOffsetX, y: contentOffset.y), animated:
+                    animated)
+                
+            }
         }
     }
     
