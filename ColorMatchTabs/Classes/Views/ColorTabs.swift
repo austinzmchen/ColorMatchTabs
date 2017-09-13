@@ -156,6 +156,8 @@ open class ColorTabs: UIControl {
 private extension ColorTabs {
     
     func commonInit() {
+        self.clipsToBounds = true // ac
+        
         addSubview(stackView)
         stackView.distribution = .fillEqually
     }
