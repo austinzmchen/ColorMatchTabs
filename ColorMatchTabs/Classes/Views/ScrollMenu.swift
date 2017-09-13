@@ -11,7 +11,6 @@ import UIKit
 @objc public protocol ScrollMenuDelegate: UIScrollViewDelegate {
     
     @objc optional func scrollMenu(_ scrollMenu: ScrollMenu, didSelectedItemAt index: Int)
-    
 }
 
 @objc public protocol ScrollMenuDataSource: class {

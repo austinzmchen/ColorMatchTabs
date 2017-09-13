@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuView: UIView {
+public class MenuView: UIView {
     
     var circleButtonTopCt: NSLayoutConstraint?
     var circleButtonBottomCt: NSLayoutConstraint?
@@ -16,6 +16,7 @@ class MenuView: UIView {
     internal(set) var navigationBar: ExtendedNavigationBar!
     internal(set) var tabs: ColorTabs!
     internal(set) var scrollMenu: ScrollMenu!
+    open var scrollViewDelegate = CMScrollViewDelegate() // ac
     internal(set) var circleMenuButton: UIButton!
     fileprivate var shadowView: VerticalGradientView!
     
@@ -25,13 +26,13 @@ class MenuView: UIView {
         commonInit()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         commonInit()
     }
     
-    override func willMove(toSuperview newSuperview: UIView?) {
+    public override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         
         layoutIfNeeded()
@@ -52,7 +53,7 @@ class MenuView: UIView {
         commonInit()
     }
     
-    override func updateConstraints() {
+    public override func updateConstraints() {
         super.updateConstraints()
         
         layoutNavigationBar()
@@ -76,6 +77,8 @@ private extension MenuView {
     func createSubviews() {
         scrollMenu = ScrollMenu()
         scrollMenu.showsHorizontalScrollIndicator = false
+        scrollMenu.delegate = scrollViewDelegate
+        scrollMenu.panGestureRecognizer.addTarget(scrollViewDelegate, action: #selector(CMScrollViewDelegate.panned(recognizer:)))
         addSubview(scrollMenu)
         
         navigationBar = ExtendedNavigationBar()
@@ -98,7 +101,6 @@ private extension MenuView {
         circleButtonBottomCt = circleMenuButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: PlusButtonButtonOffset)
         circleButtonTopCt = circleMenuButton.topAnchor.constraint(equalTo: topAnchor, constant: -PlusButtonButtonOffset)
     }
-    
 }
 
 // Layout
@@ -172,5 +174,4 @@ private extension MenuView {
             circleButtonTopCt?.isActive = true
         }
     }
-    
 }
