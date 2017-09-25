@@ -8,12 +8,12 @@
 
 import UIKit
 
-final class ExtendedNavigationBar: UIView {
+open class ExtendedNavigationBar: UIView {
     
-    var topCt: NSLayoutConstraint?
-    var bottomCt: NSLayoutConstraint?
+    open var topCt: NSLayoutConstraint?
+    open var bottomCt: NSLayoutConstraint?
     
-    override func willMove(toWindow newWindow: UIWindow?) {
+    open override func willMove(toWindow newWindow: UIWindow?) {
         layer.shadowOffset = CGSize(width: 0, height: 1 / UIScreen.main.scale)
         layer.shadowRadius = 0
         layer.shadowColor = UIColor.black.cgColor
@@ -37,11 +37,11 @@ final class ExtendedNavigationBar: UIView {
         self.backgroundColor = UIColor.clear
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToSuperview() {
+    open override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
         blurView.translatesAutoresizingMaskIntoConstraints = false
