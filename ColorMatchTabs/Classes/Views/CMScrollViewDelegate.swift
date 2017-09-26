@@ -19,6 +19,7 @@ open class CMScrollViewDelegate: ACScrollViewDelegate {
     open weak var delegate: CMScrollInteractionDelegate?
     
     private var _isScrollStarted = false
+    private var prevIndex: Int = 0
     
     open func panned(recognizer: UIPanGestureRecognizer) {
         guard let sv = _scrollView
@@ -64,5 +65,34 @@ open class CMScrollViewDelegate: ACScrollViewDelegate {
         default:
             break
         }
+    }
+    
+    // ac
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        guard let sv = _scrollView as? ScrollMenu,
+            sv.previousIndex < sv.viewControllers.count
+            else { return }
+        
+        prevIndex = sv.previousIndex
+        
+        // notify current will disappearing
+        let currentIndex = sv.indexOfVisibleItem
+        let vc = sv.viewControllers[currentIndex]
+        vc.viewWillDisappear(true)
+    }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let sv = _scrollView as? ScrollMenu,
+            prevIndex < sv.viewControllers.count
+            else { return }
+        
+        // notify previous did disappearing
+        let vc = sv.viewControllers[prevIndex]
+        vc.viewDidDisappear(true)
+        
+        // notify current appearing
+        let toVC = sv.viewControllers[sv.previousIndex]
+        toVC.viewWillAppear(true)
+        toVC.viewDidDisappear(true)
     }
 }

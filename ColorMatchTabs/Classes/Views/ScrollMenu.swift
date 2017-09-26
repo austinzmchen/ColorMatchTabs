@@ -29,16 +29,16 @@ open class ScrollMenu: UIScrollView {
     open var destinationIndex = 0
     open var isCustomSetContentOffsetAnimation = true // ac
 
-    fileprivate var indexOfVisibleItem: Int {
+    var indexOfVisibleItem: Int {
         if bounds.width > 0 {
             return min(Int(round(contentOffset.x / bounds.width)), viewControllers.count - 1)
         }
         return 0
     }
-    fileprivate var previousIndex = 0
+    var previousIndex = 0
     fileprivate var manualSelection = false
     
-    fileprivate var viewControllers: [UIViewController] = [] {
+    var viewControllers: [UIViewController] = [] {
         didSet {
             layoutContent()
         }
