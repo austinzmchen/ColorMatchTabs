@@ -145,6 +145,11 @@ private extension ScrollMenu {
             let width = viewControllers[index].view.bounds.width
             let contentOffsetX = width * CGFloat(index)
             
+            // notify view appearance
+            let pIndex = previousIndex
+            if pIndex < viewControllers.count { viewControllers[pIndex].viewWillDisappear(true) }
+            if index < viewControllers.count { viewControllers[index].viewWillAppear(true) }
+            
             if isCustomSetContentOffsetAnimation && animated {
                 UIView.animate(withDuration: 0.5, delay: 0,
                                usingSpringWithDamping: 0.8,
@@ -158,11 +163,18 @@ private extension ScrollMenu {
                         self.setContentOffset(CGPoint(x: contentOffsetX, y: self.contentOffset.y), animated:
                             false)
                     }
+                    
+                    // notify view appearance
+                    if pIndex < self.viewControllers.count { self.viewControllers[pIndex].viewDidDisappear(true) }
+                    if index < self.viewControllers.count { self.viewControllers[index].viewDidAppear(true) }
                 })
             } else {
                 setContentOffset(CGPoint(x: contentOffsetX, y: contentOffset.y), animated:
                     animated)
                 
+                // notify view appearance
+                if pIndex < self.viewControllers.count { self.viewControllers[pIndex].viewDidDisappear(true) }
+                if index < self.viewControllers.count { self.viewControllers[index].viewDidAppear(true) }
             }
         }
     }
