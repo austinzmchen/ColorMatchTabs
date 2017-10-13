@@ -25,6 +25,7 @@ public struct ACCustomColorMatchTabsViewControllerStyle {
     public var isNavigationBarBlurred: Bool
     public var isNavigationBarOnTop: Bool
     public var tabFont: UIFont?
+    public var tabsStyle = ACColorTabsStyle.widenSelectedTab
     public var scrollViewBackgroundColor: UIColor?
     
     public init() {
@@ -102,6 +103,7 @@ open class ColorMatchTabsViewController: UITabBarController {
             
             if let tf = s.tabFont {
                 _view.tabs.titleFont = tf
+                _view.tabs.tabsStyle = s.tabsStyle
             }
             
             if let nbColor = s.navigationBarColor {

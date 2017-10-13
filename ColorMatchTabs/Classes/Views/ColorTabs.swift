@@ -22,7 +22,7 @@ private let HighlighterAnimationDuration: TimeInterval = SwitchAnimationDuration
     func tabSwitcher(_ tabSwitcher: ColorTabs, tintColorAt index: Int) -> UIColor
 }
 
-enum ACColorTabsStyle {
+public enum ACColorTabsStyle {
     case widenSelectedTab // framework default
     case none
 }
