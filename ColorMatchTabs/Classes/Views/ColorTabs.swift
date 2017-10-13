@@ -50,7 +50,7 @@ open class ColorTabs: UIControl {
         return highlighterView
     }()
     
-    var tabsStyle: ACColorTabsStyle = .none
+    var tabsStyle: ACColorTabsStyle = .widenSelectedTab
     
     override init(frame: CGRect) {
         super.init(frame: frame)
