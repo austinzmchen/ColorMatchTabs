@@ -20,7 +20,11 @@ private let HighlighterAnimationDuration: TimeInterval = SwitchAnimationDuration
     func tabSwitcher(_ tabSwitcher: ColorTabs, iconAt index: Int) -> UIImage
     func tabSwitcher(_ tabSwitcher: ColorTabs, hightlightedIconAt index: Int) -> UIImage
     func tabSwitcher(_ tabSwitcher: ColorTabs, tintColorAt index: Int) -> UIColor
-    
+}
+
+enum ACColorTabsStyle {
+    case widenSelectedTab // framework default
+    case none
 }
 
 open class ColorTabs: UIControl {
@@ -45,6 +49,8 @@ open class ColorTabs: UIControl {
         
         return highlighterView
     }()
+    
+    var tabsStyle: ACColorTabsStyle = .none
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -146,7 +152,14 @@ open class ColorTabs: UIControl {
             
             let label = createLabel(forIndex: index, withDataSource: dataSource)
             labels.append(label)
-            stackView.addArrangedSubview(label)
+            
+            // adjust based on style
+            switch tabsStyle {
+            case .widenSelectedTab:
+                stackView.addArrangedSubview(label)
+            case .none:
+                break
+            }
         }
     }
     
@@ -168,6 +181,10 @@ private extension ColorTabs {
         button.setImage(dataSource.tabSwitcher(self, iconAt: index), for: UIControlState())
         button.setImage(dataSource.tabSwitcher(self, hightlightedIconAt: index), for: .selected)
         button.addTarget(self, action: #selector(selectButton(_:)), for: .touchUpInside)
+        
+        if case .none = tabsStyle {
+            button.titleLabel?.font = titleFont
+        }
         
         return button
     }
@@ -212,6 +229,24 @@ private extension ColorTabs {
             toLabel.alpha = 1
             toIcon.isSelected = true
             
+            // adjust based on style
+            switch self.tabsStyle {
+            case .widenSelectedTab:
+                break
+            case .none:
+                // labels are not added to stackView, so use button
+                fromIcon.setTitle(nil, for: .normal)
+                toIcon.setTitle(toLabel.text, for: .normal)
+                
+                // remove spacing for last selected
+                fromIcon.imageEdgeInsets = UIEdgeInsets.zero
+                
+                // leave spacing between button image and text
+                var insets = toIcon.imageEdgeInsets
+                insets.right += 15.0
+                toIcon.imageEdgeInsets = insets
+            }
+            
             self.stackView.layoutIfNeeded()
             self.layoutIfNeeded()
             self.moveHighlighterView(toItemAt: toIndex)
@@ -236,14 +271,32 @@ private extension ColorTabs {
         let toLabel = labels[toIndex]
         let toIcon = buttons[toIndex]
         
-        // offset for first item
-        let point = convert(toIcon.frame.origin, to: self)
-        let offsetForFirstItem: CGFloat = toIndex == 0 ? -HighlighterViewOffScreenOffset : 0
-        highlighterView.frame.origin.x = point.x + offsetForFirstItem
-        
-        // offset for last item
-        let offsetForLastItem: CGFloat = toIndex == countItems - 1 ? HighlighterViewOffScreenOffset : 0
-        highlighterView.frame.size.width = toLabel.bounds.width + (toLabel.frame.origin.x - toIcon.frame.origin.x) + 10 - offsetForFirstItem + offsetForLastItem
+        // adjust based on style
+        switch tabsStyle {
+        case .widenSelectedTab:
+            // offset for first item
+            let point = convert(toIcon.frame.origin, to: self)
+            let offsetForFirstItem: CGFloat = toIndex == 0 ? -HighlighterViewOffScreenOffset : 0
+            highlighterView.frame.origin.x = point.x + offsetForFirstItem
+
+            // offset for last item
+            let offsetForLastItem: CGFloat = toIndex == countItems - 1 ? HighlighterViewOffScreenOffset : 0
+            highlighterView.frame.size.width = toLabel.bounds.width
+                + (toLabel.frame.origin.x - toIcon.frame.origin.x) + 10
+                - offsetForFirstItem + offsetForLastItem
+            
+        case .none:
+            // offset for first item
+            let point = convert(toIcon.frame.origin, to: self)
+            let offsetForFirstItem: CGFloat = toIndex == 0 ? -HighlighterViewOffScreenOffset : 0
+            highlighterView.frame.origin.x = point.x + offsetForFirstItem
+            
+            // offset for last item
+            let offsetForLastItem: CGFloat = toIndex == countItems - 1 ? HighlighterViewOffScreenOffset : 0
+            highlighterView.frame.size.width = toIcon.bounds.width
+//                + (toLabel.frame.origin.x - toIcon.frame.origin.x) + 10
+                - offsetForFirstItem + offsetForLastItem
+        }
         
         highlighterView.backgroundColor = dataSource!.tabSwitcher(self, tintColorAt: toIndex)
     }
