@@ -14,7 +14,7 @@ public class MenuView: UIView {
     var circleButtonBottomCt: NSLayoutConstraint?
     
     open var navigationBar: ExtendedNavigationBar!
-    internal(set) var tabs: ColorTabs!
+    open var tabs: ColorTabs!
     internal(set) var scrollMenu: ScrollMenu!
     open var scrollViewDelegate = CMScrollViewDelegate() // ac
     internal(set) var circleMenuButton: UIButton!
