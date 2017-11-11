@@ -34,7 +34,15 @@ public struct ACCustomColorMatchTabsViewControllerStyle {
     }
 }
 
-open class ColorMatchTabsViewController: UITabBarController {
+/* switch from UITabBarController to UIViewController because it cause a crash if a overCurrentContext controller is presented on top of this, and uses RZTransitions
+ The error is
+     Fatal Exception: NSInvalidArgumentException
+     *** -[__NSArrayM insertObject:atIndex:]: object cannot be nil
+ 
+ https://fabric.io/hubub/ios/apps/ca.bellmedia.snackabletv/issues?time=last-twenty-four-hours&event_type=crash&subFilter=state&state=open&build%5B0%5D=top-builds
+*/
+open class ColorMatchTabsViewController: UIViewController // UITabBarController
+{
     
     @IBInspectable open weak var dataSource: ColorMatchTabsViewControllerDataSource? {
         didSet {
